@@ -1,0 +1,15 @@
+import utils from './utils';
+
+describe('test utilities', () => {
+  it('should getHeaderHelper', async () => {
+    const headers = {
+      'aaA': 'a',
+      'bbb': 'a',
+      'BaB': 'a'
+    };
+    expect(utils.getHeaderHelper(headers, 'aAa')).toEqual('a');
+    expect(utils.getHeaderHelper(headers, 'bBb')).toEqual('a');
+    expect(utils.getHeaderHelper(headers, 'bAB')).toEqual('a');
+    expect(utils.getHeaderHelper(headers, 'bAa')).toEqual('');
+  });
+});

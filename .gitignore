@@ -1,0 +1,10 @@
+node_modules/
+.idea/workspace.xml
+coverage/
+dist/
+lib/
+out/
+build/
+.env
+
+*.log

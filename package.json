@@ -1,0 +1,62 @@
+{
+  "name": "can-pass-verify",
+  "version": "1.0.0",
+  "author": {
+    "name": "can-group",
+    "email": "lecle@orgos.net",
+    "url": "https://canfoundation.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canfoundation/can-pass-verify"
+  },
+  "license": "MIT",
+  "keywords": [
+    "can-pass"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "prebuild": "yarn clean",
+    "build": "tsc -p dev-configs",
+    "prepublish": "yarn build",
+    "test": "jest --config ./dev-configs/jest.config.js -o"
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.10",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.0",
+    "@types/node-fetch": "^2.5.5",
+    "dotenv-extended": "^2.7.1",
+    "faker": "^4.1.0",
+    "husky": ">=4",
+    "jest": "^25.1.0",
+    "lint-staged": ">=10",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.2.1",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.1.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,css,md}": "prettier --write"
+  }
+}

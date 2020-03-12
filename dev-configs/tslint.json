@@ -1,0 +1,71 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {},
+  "rules": {
+    "prettier": true,
+    "no-unused-expression": true,
+    "interface-name": false,
+    "no-empty-interface": false,
+    "curly": [true, "ignore-same-line"],
+    "quotemark": [true, "single"],
+    "member-access": false,
+    "ordered-imports": false,
+    "arrow-parens": false,
+    "indent": [true, "spaces", 2],
+    "object-literal-sort-keys": false,
+    "no-string-literal": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
+    "variable-name": false,
+    "no-var-requires": false,
+    "member-ordering": false,
+    "eofline": true,
+    "no-trailing-whitespace": true,
+    "one-line": false,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-module",
+      "check-type",
+      "check-type-operator",
+      "check-preblock",
+      "check-operator",
+      "check-rest-spread",
+      "check-typecast"
+    ],
+    "object-curly-spacing": true,
+    "max-line-length": false,
+    "ban": [
+      true,
+      "eval",
+      {
+        "name": "fdescribe",
+        "message": "don't focus test suite"
+      },
+      {
+        "name": ["describe", "only"],
+        "message": "don't focus test suite"
+      },
+      {
+        "name": "fit",
+        "message": "don't focus test case"
+      },
+      {
+        "name": ["it", "only"],
+        "message": "don't focus test case"
+      }
+    ]
+  },
+  "rulesDirectory": ["../node_modules/tslint-eslint-rules/dist/rules"]
+}
