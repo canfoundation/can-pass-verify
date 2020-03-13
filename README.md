@@ -3,7 +3,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Build Status](https://travis-ci.org/canfoundation/can-pass-verify.svg?branch=master)](https://travis-ci.org/canfoundation/can-pass-verify)
 
-Code in force SDK provides functions for easily interacting with Governance Design APIs.
+can-pass-verify provides utility functions for working with the can-pass tokens.
 
 ## Installation
 
