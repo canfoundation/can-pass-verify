@@ -9,23 +9,35 @@ interface Options {
   fetch: (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 }
 
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
 interface VerifyOutput {
   scope: string;
   userId: string;
 }
 
-const app: Options = {
+const _app: Options = {
   client_id: null,
   client_secret: null,
   canPassApi: null,
   fetch: null,
 };
 
+/**
+ * config global
+ * @param options
+ */
 function config(options: Options) {
-  Object.assign(app, options);
+  Object.assign(_app, options);
 }
 
-function verify(accessToken: string): Promise<VerifyOutput> {
+function verify(
+  accessToken: string,
+  options?: Partial<Options>,
+): Promise<VerifyOutput> {
+  const app = Object.assign({}, _app, options);
   return app
     .fetch(
       `${app.canPassApi}/authenticate?access_token=${accessToken.split(
@@ -43,7 +55,12 @@ interface TokenOutput {
   scope: string;
 }
 
-async function refreshAccessToken(refreshToken: string): Promise<TokenOutput> {
+async function refreshAccessToken(
+  refreshToken: string,
+  options?: Partial<Options>,
+): Promise<TokenOutput> {
+  const app = Object.assign({}, _app, options);
+
   const params = new URLSearchParams({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
