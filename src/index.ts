@@ -2,48 +2,40 @@ import { RequestInfo, RequestInit, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
 import { logger } from './shares/logger';
 
-interface Options {
-  client_id: string;
-  client_secret: string;
+interface Configs {
   canPassApi: string;
   fetch: (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 }
 
-type Partial<T> = {
-  [P in keyof T]?: T[P];
-};
+interface ClientSecret {
+  client_id: string;
+  client_secret: string;
+}
 
 interface VerifyOutput {
   scope: string;
   userId: string;
 }
 
-const _app: Options = {
-  client_id: null,
-  client_secret: null,
+const _app: Configs = {
   canPassApi: null,
   fetch: null,
 };
 
 /**
  * config global
- * @param options
+ * @param configs
  */
-function config(options: Options) {
-  Object.assign(_app, options);
+function config(configs: Configs) {
+  Object.assign(_app, configs);
 }
 
-function verify(
-  accessToken: string,
-  options?: Partial<Options>,
-): Promise<VerifyOutput> {
-  const app = Object.assign({}, _app, options);
-  return app
-    .fetch(
-      `${app.canPassApi}/authenticate?access_token=${accessToken.split(
-        ' ',
-      )[1] || accessToken}`,
-    )
+function verify(accessToken: string): Promise<VerifyOutput> {
+  // handle case access-token start with `Bearer <access-token>`
+  const _accessToken = accessToken.split(' ')[1] || accessToken;
+
+  return _app
+    .fetch(`${_app.canPassApi}/authenticate?access_token=${_accessToken}`)
     .then(res => res.json());
 }
 
@@ -55,24 +47,22 @@ interface TokenOutput {
   scope: string;
 }
 
-async function refreshAccessToken(
+function refreshAccessToken(
   refreshToken: string,
-  options?: Partial<Options>,
+  clientSecret: ClientSecret,
 ): Promise<TokenOutput> {
-  const app = Object.assign({}, _app, options);
-
   const params = new URLSearchParams({
     grant_type: 'refresh_token',
     refresh_token: refreshToken,
   });
 
-  return app
-    .fetch(app.canPassApi + '/token', {
+  return _app
+    .fetch(_app.canPassApi + '/token', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         Authorization: `Basic ${Buffer.from(
-          `${app.client_id}:${app.client_secret}`,
+          `${clientSecret.client_id}:${clientSecret.client_secret}`,
         ).toString('base64')}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -80,7 +70,7 @@ async function refreshAccessToken(
     })
     .then(resp => resp.json())
     .catch(err => {
-      logger.error(app.canPassApi, err);
+      logger.error(_app.canPassApi, err);
       return err;
     });
 }

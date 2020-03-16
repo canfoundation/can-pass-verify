@@ -23,11 +23,16 @@ yarn can-pass-verify
 
 ## Features
 
+- get header helper
+
 ```typescript
 import canPass from 'can-pass-verify/lib/shares/utils';
 
 const authorization = canPass.getHeaderHelper(headers, 'Authorization');
 ```
+
+- verify access token
+- get new access token
 
 ```typescript
 import canPass from 'can-pass-verify';
@@ -36,16 +41,14 @@ import fetch from 'node-fetch';
 // global config
 canPass.config({
   canPassApi: process.env.app_can_pass_api,
-  client_secret: '',
-  client_id: '',
   fetch,
 });
 
 let u = await canPass.verify(accessToken);
 
-// or pass config on each calling
-u = await canPass.verify(accessToken, {
-  client_secret: '',
-  client_id: '',
+// refreshAccessToken
+u = await canPass.refreshAccessToken(refreshToken, {
+  client_secret: '<your client secret - never publish it>',
+  client_id: '<your client id>',
 });
 ```
