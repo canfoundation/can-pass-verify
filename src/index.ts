@@ -13,8 +13,19 @@ interface ClientSecret {
 }
 
 interface VerifyOutput {
-  scope: string;
+  applicationId: string;
+  clientId: string;
   userId: string;
+  scope: string;
+  scopes: string[];
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
+  refreshTokenExpiresAt: string;
+  isPublic: boolean;
+  isTrusted: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const _app: Configs = {

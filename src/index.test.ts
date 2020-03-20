@@ -24,7 +24,7 @@ xdescribe('test index', () => {
   });
 
   it('should verify access token', async () => {
-    const accessToken = '508d35ee05095d6927b2dfecafe84a5b0c40c9e2';
+    const accessToken = 'c2b78f5d1462b30e98ad77e1154b5cc58eb0072a';
     const res = await index.verify(accessToken);
     logger.debug(res);
   });
