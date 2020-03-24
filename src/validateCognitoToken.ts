@@ -23,6 +23,8 @@ function validateToken(
   type: 'id' | 'access',
   config: CognitoExpressConfig,
 ): Promise<any> {
+  if (!token) return Promise.resolve();
+
   return new Promise((resolve, reject) => {
     const ce: CognitoExpress = getCognitoByType(type, config);
     if (utils.isEmpty(ce)) {
