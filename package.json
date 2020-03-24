@@ -1,6 +1,6 @@
 {
   "name": "can-pass-verify",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "can-group",
     "email": "lecle@orgos.net",
@@ -25,6 +25,9 @@
     "build": "tsc -p dev-configs",
     "prepublish": "yarn build",
     "test": "jest --config ./dev-configs/jest.config.js -o"
+  },
+  "dependencies": {
+    "cognito-express": "^2.0.16"
   },
   "devDependencies": {
     "@types/faker": "^4.1.10",
