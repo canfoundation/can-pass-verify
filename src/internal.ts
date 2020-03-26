@@ -4,6 +4,12 @@ import validateCognitoToken, {
 } from './validateCognitoToken';
 import { Header } from './shares/Header';
 import { VerifyInternalOutput } from './shares/VerifyInternalOutput';
+import {
+  VerifyApiKeyConfig,
+  VerifyApiKeyInput,
+  VerifyApiKeyOutput,
+} from './shares/ApiKey';
+import gql from './shares/gql';
 
 function verifyInternal(
   header: Header,
@@ -26,6 +32,33 @@ function verifyInternal(
     });
 }
 
+function verifyApiKey(
+  input: VerifyApiKeyInput,
+  config: VerifyApiKeyConfig,
+): Promise<VerifyApiKeyOutput> {
+  return gql(config.fetch, config.canpassApiKeyEndpoint, {
+    query: `query verifyApiKey(
+      $accessKey: String!
+      $adminKey: String
+      $displayerKey: String
+    ) {
+      verifyApiKey(
+        accessKey: $accessKey
+        adminKey: $adminKey
+        displayerKey: $displayerKey
+      ) {
+        ownerId
+        accessKey
+        adminKey
+        displayerKey
+      }
+    }`,
+    headers: config.headers,
+    variables: input,
+  }).then(({ data }) => utils.get(data, 'verifyApiKey'));
+}
+
 export default {
   verifyInternal,
+  verifyApiKey,
 };

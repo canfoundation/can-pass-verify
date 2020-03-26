@@ -1,6 +1,7 @@
 import { RequestInfo, RequestInit, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
 import { logger } from './shares/logger';
+import checkFetchStatus from './shares/checkFetchStatus';
 
 interface Configs {
   canPassApi: string;
@@ -41,22 +42,13 @@ function config(configs: Configs) {
   Object.assign(_app, configs);
 }
 
-function checkStatus(res) {
-  if (res.ok) {
-    // res.status >= 200 && res.status < 300
-    return res;
-  }
-
-  throw new Error(res.statusText);
-}
-
 function verify(accessToken: string): Promise<VerifyOutput> {
   // handle case access-token start with `Bearer <access-token>`
   const _accessToken = accessToken.split(' ')[1] || accessToken;
 
   return _app
     .fetch(`${_app.canPassApi}/authenticate?access_token=${_accessToken}`)
-    .then(checkStatus)
+    .then(checkFetchStatus)
     .then(res => res.json());
 }
 
@@ -89,7 +81,7 @@ function refreshAccessToken(
       },
       body: params,
     })
-    .then(checkStatus)
+    .then(checkFetchStatus)
     .then(res => res.json())
     .catch(err => {
       logger.error(_app.canPassApi, err);
