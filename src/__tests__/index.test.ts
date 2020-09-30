@@ -1,0 +1,119 @@
+import '../shares/loadEnv';
+import index from '../index';
+import { URLSearchParams } from 'url';
+import { logger } from '../shares/logger';
+
+jest.mock('../shares/logger');
+
+describe('test index', () => {
+  describe('refresh token', () => {
+    it('should refresh access token', async () => {
+      const fetchRes = {
+        ok: true,
+        json: jest.fn(),
+      };
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockResolvedValue(fetchRes),
+      };
+
+      index.config(configs);
+      const refreshToken = 'f03a2b78f07304bcbf6c0a1caeba193539b1eaf5';
+      const clientSecret = {
+        client_id: process.env.app_client_id,
+        client_secret: process.env.app_client_secret,
+      };
+      await index.refreshAccessToken(refreshToken, clientSecret);
+
+      expect(configs.fetch).toBeCalledTimes(1);
+      expect(configs.fetch).toBeCalledWith(configs.canPassApi + '/token', {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Basic NTE0NzQ0ZmUyMzU2ZWNkNTg1Nzg5ZWJkZGZlY2IwODc6NmI4OGM4ZTIxNWNiMWM2MmRlYjA3YzdlMTc2ZmJiMWI2Njc5OTcwNTI0NmRiNTAyMTI3ZDJkZDkyY2M3YmZmNQ==',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: expect.any(URLSearchParams),
+        method: 'POST',
+      });
+      expect(fetchRes.json).toBeCalledTimes(1);
+      expect(fetchRes.json).toBeCalledWith();
+    });
+
+    it('handle error', async () => {
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockRejectedValue('fake error'),
+      };
+
+      index.config(configs);
+      const refreshToken = 'f03a2b78f07304bcbf6c0a1caeba193539b1eaf5';
+      const clientSecret = {
+        client_id: process.env.app_client_id,
+        client_secret: process.env.app_client_secret,
+      };
+      await expect(index.refreshAccessToken(refreshToken, clientSecret)).rejects.toEqual(
+        'fake error',
+      );
+
+      expect(configs.fetch).toBeCalledTimes(1);
+      expect(configs.fetch).toBeCalledWith(configs.canPassApi + '/token', {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Basic NTE0NzQ0ZmUyMzU2ZWNkNTg1Nzg5ZWJkZGZlY2IwODc6NmI4OGM4ZTIxNWNiMWM2MmRlYjA3YzdlMTc2ZmJiMWI2Njc5OTcwNTI0NmRiNTAyMTI3ZDJkZDkyY2M3YmZmNQ==',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: expect.any(URLSearchParams),
+        method: 'POST',
+      });
+
+      expect(logger.error).toBeCalledTimes(1);
+      expect(logger.error).toBeCalledWith(configs.canPassApi, 'fake error');
+    });
+  });
+
+  describe('test verify', () => {
+    it('should verify access token', async () => {
+      const fetchRes = {
+        ok: true,
+        json: jest.fn(),
+      };
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockResolvedValue(fetchRes),
+      };
+
+      index.config(configs);
+
+      const accessToken = 'badc';
+      await index.verify(accessToken);
+      expect(configs.fetch).toBeCalledTimes(1);
+      expect(configs.fetch).toBeCalledWith(
+        `${configs.canPassApi}/authenticate?access_token=${accessToken}`,
+      );
+      expect(fetchRes.json).toBeCalledTimes(1);
+      expect(fetchRes.json).toBeCalledWith();
+    });
+
+    it('should verify `Bearer` access token', async () => {
+      const fetchRes = {
+        ok: true,
+        json: jest.fn(),
+      };
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockResolvedValue(fetchRes),
+      };
+
+      index.config(configs);
+
+      const accessToken = 'Bearer badc';
+      await index.verify(accessToken);
+      expect(configs.fetch).toBeCalledTimes(1);
+      expect(configs.fetch).toBeCalledWith(`${configs.canPassApi}/authenticate?access_token=badc`);
+      expect(fetchRes.json).toBeCalledTimes(1);
+      expect(fetchRes.json).toBeCalledWith();
+    });
+  });
+});

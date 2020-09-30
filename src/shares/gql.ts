@@ -8,7 +8,7 @@ interface GqlParams {
   headers?: Header;
 }
 
-const gql = async (fetch: Fetch, url: string, gqlParams: GqlParams) => {
+const gql = (fetch: Fetch, url: string, gqlParams: GqlParams): Promise<any> => {
   const { headers, query: _query, variables } = gqlParams;
   const query = _query.replace(/\s+/g, ' ');
 

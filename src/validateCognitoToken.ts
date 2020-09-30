@@ -1,15 +1,11 @@
-import CognitoExpress from 'cognito-express';
-import utils from './shares/utils';
+import * as CognitoExpress from 'cognito-express';
 
 export interface CognitoExpressConfig {
   region: string;
   cognitoUserPoolId: string;
 }
 
-function getCognitoByType(
-  type: 'id' | 'access',
-  config: CognitoExpressConfig,
-): CognitoExpress {
+function getCognitoByType(type: 'id' | 'access', config: CognitoExpressConfig): CognitoExpress {
   return new CognitoExpress({
     region: config.region,
     cognitoUserPoolId: config.cognitoUserPoolId,
@@ -27,10 +23,6 @@ function validateToken(
 
   return new Promise((resolve, reject) => {
     const ce: CognitoExpress = getCognitoByType(type, config);
-    if (utils.isEmpty(ce)) {
-      throw new Error('Invalid type.');
-    }
-
     ce.validate(token, (err, res) => {
       if (err) return reject(err);
       resolve(res);
