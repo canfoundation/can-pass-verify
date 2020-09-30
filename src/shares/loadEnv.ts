@@ -1,5 +1,3 @@
-import { logger } from './logger';
-
 function loadEnv() {
   const config = {
     encoding: 'utf8',
@@ -16,17 +14,7 @@ function loadEnv() {
   };
 
   require('dotenv-extended').load(config);
-  Object.keys(process.env)
-    .filter(k => /^(app_|AWS_).+/.test(k))
-    .forEach(k => {
-      logger.debug(k, '=', process.env[k]);
-    });
 }
 
-let loaded;
-
-if (!loaded) {
-  if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
-  loadEnv();
-  loaded = true;
-}
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
+loadEnv();
