@@ -4,7 +4,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es5",
-    "outDir": "lib"
+    "outDir": "lib",
+    "sourceMap": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/__tests__"]
