@@ -33,6 +33,7 @@ const authorization = canPass.getHeaderHelper(headers, 'Authorization');
 
 - verify access token
 - get new access token
+- get token
 
 ```typescript
 import canPass from 'can-pass-verify';
@@ -51,4 +52,16 @@ u = await canPass.refreshAccessToken(refreshToken, {
   client_secret: '<your client secret - never publish it>',
   client_id: '<your client id>',
 });
+
+// getToken
+u = await canPass.getToken(
+  {
+    code: '<code is return from login process>',
+    redirect_uri: '<redirect_uri must match with one send through login process>',
+  },
+  {
+    client_secret: '<your client secret - never publish it>',
+    client_id: '<your client id>',
+  },
+);
 ```

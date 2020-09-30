@@ -3,17 +3,17 @@ import { URLSearchParams } from 'url';
 import { logger } from './shares/logger';
 import checkFetchStatus from './shares/checkFetchStatus';
 
-interface Configs {
+export interface Configs {
   canPassApi: string;
   fetch: (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 }
 
-interface ClientSecret {
+export interface ClientSecret {
   client_id: string;
   client_secret: string;
 }
 
-interface VerifyOutput {
+export interface VerifyOutput {
   applicationId: string;
   clientId: string;
   userId: string;
@@ -52,7 +52,7 @@ function verify(accessToken: string): Promise<VerifyOutput> {
     .then(res => res.json());
 }
 
-interface TokenOutput {
+export interface TokenOutput {
   access_token: string;
   token_type: string;
   expires_in: number;
@@ -89,8 +89,45 @@ function refreshAccessToken(
     });
 }
 
+export interface GetTokenInput {
+  code: string;
+  redirect_uri: string;
+}
+
+/**
+ * Exchange authorization_code to get access-token
+ * More information at: https://oauth.net/2/grant-types/authorization-code/
+ */
+function getToken(input: GetTokenInput, clientSecret: ClientSecret): Promise<TokenOutput> {
+  const params = new URLSearchParams({
+    grant_type: 'authorization_code',
+    code: input.code,
+    redirect_uri: input.redirect_uri,
+  });
+
+  return _app
+    .fetch(_app.canPassApi + '/token', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Basic ${Buffer.from(
+          `${clientSecret.client_id}:${clientSecret.client_secret}`,
+        ).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params,
+    })
+    .then(checkFetchStatus)
+    .then(res => res.json())
+    .catch(err => {
+      logger.error(_app.canPassApi, err);
+      throw err;
+    });
+}
+
 export default {
   config,
   verify,
   refreshAccessToken,
+  getToken,
 };
