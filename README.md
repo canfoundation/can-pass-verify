@@ -2,6 +2,7 @@
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Build Status](https://travis-ci.org/canfoundation/can-pass-verify.svg?branch=master)](https://travis-ci.org/canfoundation/can-pass-verify)
+[![codecov](https://codecov.io/gh/canfoundation/can-pass-verify/branch/master/graph/badge.svg?token=4G71QQM0N5)](https://codecov.io/gh/canfoundation/can-pass-verify)
 
 can-pass-verify provides utility functions for working with the can-pass tokens.
 
