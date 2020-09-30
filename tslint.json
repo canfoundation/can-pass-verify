@@ -67,5 +67,5 @@
       }
     ]
   },
-  "rulesDirectory": ["../node_modules/tslint-eslint-rules/dist/rules"]
+  "rulesDirectory": ["node_modules/tslint-eslint-rules/dist/rules"]
 }

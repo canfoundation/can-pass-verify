@@ -22,9 +22,9 @@
   "scripts": {
     "clean": "rimraf lib",
     "prebuild": "yarn clean",
-    "build": "tsc -p dev-configs",
+    "build": "tsc -p .",
     "prepublish": "yarn build",
-    "test": "jest --config ./dev-configs/jest.config.js -o"
+    "test": "jest"
   },
   "dependencies": {
     "cognito-express": "^2.0.16"
