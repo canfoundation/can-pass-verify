@@ -28,6 +28,7 @@
     "prebuild": "yarn clean",
     "build": "tsc -p .",
     "prepublish": "yarn build",
+    "release": "standard-version",
     "test": "jest"
   },
   "dependencies": {
@@ -46,6 +47,7 @@
     "node-fetch": "^2.6.1",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
+    "standard-version": "^9.0.0",
     "ts-jest": "^25.2.1",
     "tslint": "^6.1.0",
     "tslint-config-prettier": "^1.18.0",
