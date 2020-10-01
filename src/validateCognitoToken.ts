@@ -1,4 +1,4 @@
-import * as CognitoExpress from 'cognito-express';
+import CognitoExpress from 'cognito-express';
 
 export interface CognitoExpressConfig {
   region: string;
@@ -30,6 +30,5 @@ function validateToken(
   });
 }
 
-export default {
-  validateToken,
-};
+export { validateToken };
+export default { validateToken };

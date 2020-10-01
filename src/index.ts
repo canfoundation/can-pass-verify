@@ -1,7 +1,8 @@
 import { RequestInfo, RequestInit, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
-import { logger } from './shares/logger';
+
 import checkFetchStatus from './shares/checkFetchStatus';
+import { logger } from './shares/logger';
 
 export interface Configs {
   canPassApi: string;
@@ -125,9 +126,5 @@ function getToken(input: GetTokenInput, clientSecret: ClientSecret): Promise<Tok
     });
 }
 
-export default {
-  config,
-  verify,
-  refreshAccessToken,
-  getToken,
-};
+export { config, verify, refreshAccessToken, getToken };
+export default { config, verify, refreshAccessToken, getToken };

@@ -1,9 +1,9 @@
-import utils from './shares/utils';
-import validateCognitoToken, { CognitoExpressConfig } from './validateCognitoToken';
-import { Header } from './shares/Header';
-import { VerifyInternalOutput } from './shares/VerifyInternalOutput';
 import { VerifyApiKeyConfig, VerifyApiKeyInput, VerifyApiKeyOutput } from './shares/ApiKey';
 import gql from './shares/gql';
+import { Header } from './shares/Header';
+import utils from './shares/utils';
+import { VerifyInternalOutput } from './shares/VerifyInternalOutput';
+import validateCognitoToken, { CognitoExpressConfig } from './validateCognitoToken';
 
 function verifyInternal(
   header: Header,
@@ -54,7 +54,5 @@ function verifyApiKey(
   }).then(({ data }) => utils.get(data, 'verifyApiKey'));
 }
 
-export default {
-  verifyInternal,
-  verifyApiKey,
-};
+export { verifyInternal, verifyApiKey };
+export default { verifyInternal, verifyApiKey };
