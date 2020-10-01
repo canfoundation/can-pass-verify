@@ -1,6 +1,6 @@
-import { Fetch } from './types';
-import { Header } from './Header';
 import checkFetchStatus from './checkFetchStatus';
+import { Header } from './Header';
+import { Fetch } from './types';
 
 interface GqlParams {
   query: string;

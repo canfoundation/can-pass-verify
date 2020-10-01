@@ -1,4 +1,5 @@
-import * as CognitoExpress from 'cognito-express';
+import CognitoExpress from 'cognito-express';
+
 import validateCognitoToken from '../validateCognitoToken';
 
 jest.mock('cognito-express');

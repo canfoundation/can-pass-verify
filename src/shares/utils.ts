@@ -1,9 +1,7 @@
 import { Header } from './Header';
 
 function getHeaderHelper(header: Header = {}, name = ''): string {
-  const key = Object.keys(header).find(
-    k => k.toLowerCase() === name.toLowerCase(),
-  );
+  const key = Object.keys(header).find(k => k.toLowerCase() === name.toLowerCase());
 
   if (key) return header[key] || '';
   return '';
@@ -38,6 +36,8 @@ function getCookiesFromHeader(header: Header) {
 
   return list;
 }
+
+export { isEmpty, get, getHeaderHelper, getCookiesFromHeader };
 
 export default {
   isEmpty,

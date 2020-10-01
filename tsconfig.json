@@ -3,7 +3,9 @@
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es6",
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true
   },
