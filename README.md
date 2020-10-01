@@ -19,7 +19,7 @@ npm install can-pass-verify
 or
 
 ```bash
-yarn can-pass-verify
+yarn add can-pass-verify
 ```
 
 ## Features
