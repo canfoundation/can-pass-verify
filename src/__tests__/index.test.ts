@@ -87,7 +87,10 @@ describe('test index', () => {
     it('should verify access token', async () => {
       const fetchRes = {
         ok: true,
-        json: jest.fn(),
+        json: () => ({
+          active: true,
+          userId: 'test',
+        }),
       };
       const configs = {
         canPassApi: process.env.app_can_pass_api,
@@ -97,19 +100,21 @@ describe('test index', () => {
       index.config(configs);
 
       const accessToken = 'badc';
-      await index.verify(accessToken);
+      const result = await index.verify(accessToken);
       expect(configs.fetch).toBeCalledTimes(1);
       expect(configs.fetch).toBeCalledWith(
         `${configs.canPassApi}/authenticate?access_token=${accessToken}`,
       );
-      expect(fetchRes.json).toBeCalledTimes(1);
-      expect(fetchRes.json).toBeCalledWith();
+      expect(result.userId).toBe('test');
     });
 
     it('should verify `Bearer` access token', async () => {
       const fetchRes = {
         ok: true,
-        json: jest.fn(),
+        json: () => ({
+          active: true,
+          userId: 'test',
+        }),
       };
       const configs = {
         canPassApi: process.env.app_can_pass_api,
@@ -119,11 +124,48 @@ describe('test index', () => {
       index.config(configs);
 
       const accessToken = 'Bearer badc';
-      await index.verify(accessToken);
+      const result = await index.verify(accessToken);
       expect(configs.fetch).toBeCalledTimes(1);
       expect(configs.fetch).toBeCalledWith(`${configs.canPassApi}/authenticate?access_token=badc`);
-      expect(fetchRes.json).toBeCalledTimes(1);
-      expect(fetchRes.json).toBeCalledWith();
+      expect(result.userId).toBe('test');
+    });
+
+    it('should throw error', async () => {
+      const fetchRes = {
+        ok: false,
+        statusText: 'Bad Request',
+        json: () => ({
+          active: false,
+        }),
+      };
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockResolvedValue(fetchRes),
+      };
+
+      index.config(configs);
+
+      await expect(index.verify('test')).rejects.toThrow('Bad Request');
+      expect(configs.fetch).toBeCalledTimes(1);
+    });
+
+    it('should return undefined for invalid token', async () => {
+      const fetchRes = {
+        ok: true,
+        json: () => ({
+          active: false,
+        }),
+      };
+      const configs = {
+        canPassApi: process.env.app_can_pass_api,
+        fetch: jest.fn().mockResolvedValue(fetchRes),
+      };
+
+      index.config(configs);
+
+      const result = await index.verify('test');
+      expect(configs.fetch).toBeCalledTimes(1);
+      expect(result).toBeUndefined();
     });
   });
 
