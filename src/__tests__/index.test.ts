@@ -130,7 +130,7 @@ describe('test index', () => {
       expect(result.userId).toBe('test');
     });
 
-    it('should throw error', async () => {
+    it('should throw error for bad request/response', async () => {
       const fetchRes = {
         ok: false,
         statusText: 'Bad Request',
@@ -149,7 +149,7 @@ describe('test index', () => {
       expect(configs.fetch).toBeCalledTimes(1);
     });
 
-    it('should return undefined for invalid token', async () => {
+    it('should throw error for invalid token', async () => {
       const fetchRes = {
         ok: true,
         json: () => ({
@@ -163,9 +163,8 @@ describe('test index', () => {
 
       index.config(configs);
 
-      const result = await index.verify('test');
+      await expect(index.verify('test')).rejects.toThrow('Access token is not active.');
       expect(configs.fetch).toBeCalledTimes(1);
-      expect(result).toBeUndefined();
     });
   });
 

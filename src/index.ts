@@ -30,8 +30,6 @@ export interface VerifyOutput {
   updatedAt: string;
 }
 
-active: true;
-
 const _app: Configs = {
   canPassApi: null,
   fetch: null,
@@ -45,16 +43,21 @@ function config(configs: Configs) {
   Object.assign(_app, configs);
 }
 
-async function verify(accessToken: string): Promise<VerifyOutput | undefined> {
+function verify(accessToken: string): Promise<VerifyOutput | undefined> {
   // handle case access-token start with `Bearer <access-token>`
   const _accessToken = accessToken.split(' ')[1] || accessToken;
-  const result = await _app
+
+  return _app
     .fetch(`${_app.canPassApi}/authenticate?access_token=${_accessToken}`)
     .then(checkFetchStatus)
-    .then(res => res.json());
+    .then(res => res.json())
+    .then(res => {
+      if (!res.active) {
+        throw new Error('Access token is not active.');
+      }
 
-  // @ts-ignore
-  return result.active ? (result as VerifyOutput) : undefined;
+      return res as VerifyOutput;
+    });
 }
 
 export interface TokenOutput {
